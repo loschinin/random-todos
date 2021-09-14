@@ -1,4 +1,5 @@
-import {makeAutoObservable} from  'mobx'
+import {makeAutoObservable, action} from 'mobx'
+import {ChangeEvent} from "react";
 
 // Standard interface and functions
 export interface Todo {
@@ -13,7 +14,7 @@ export const removeTodo = (todos: Todo[], id: number): Todo[] =>
 export const addTodo = (todos: Todo[], text: string): Todo[] => [
   ...todos,
   {
-    id: Math.max(0, Math.max(...todos.map(({ id }) => id))) + 1,
+    id: Math.random(),
     text,
     done: false,
   },
@@ -28,8 +29,18 @@ class Store {
     }
 
     async load(url: string) {
-        const resp = await fetch(url)
-        this.todos = await resp.json()
+        const res = await fetch(url)
+        res.json().then<Todo[]>(action("load", r => store.todos = r))
+
+    }
+
+    onChangeTodoText(e: ChangeEvent<HTMLInputElement>, id: number) {
+         const changeableTodo = this.todos.find(t => t.id && t.id === id)
+             if(changeableTodo) changeableTodo.text = e.target.value
+    }
+
+    onChangeNewTodo(e: ChangeEvent<HTMLInputElement>) {
+        this.newTodo = e.target.value
     }
 
     addTodo() {
