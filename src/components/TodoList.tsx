@@ -1,31 +1,38 @@
 import * as React from "react";
-import { Button, Input, Flex, Checkbox, Heading } from "@chakra-ui/react";
-import store, {Todo} from "../store"
-import {observer } from "mobx-react-lite"
+import { FC } from "react";
+import store, { Todo } from "../store";
+import { observer } from "mobx-react-lite";
+import { CloseButton, FormControl, InputGroup } from "react-bootstrap";
 
-function TodoListItems() {
-  return (
-    <>
-      {store.todos.map((todo: Todo) => (
-        <Flex pt={2} key={todo.id}>
-          <Checkbox onClick={() => todo.done = !todo.done}/>
-          <Input mx={2} value={todo.text} onChange={e => store.onChangeTodoText(e, todo.id)} placeholder={`${todo.id}`} />
-          <Button onClick={() => store.removeTodo(todo.id)}>Delete</Button>
-        </Flex>
-      ))}
-    </>
-  );
-}
+const TodoListItems: FC = () => (
+  <>
+    {store.todos.map((todo: Todo) => (
+      <InputGroup className="mb-3" key={todo.id}>
+        <InputGroup.Text className="bg-dark">
+          <input
+            onClick={() => (todo.completed = !todo.completed)}
+            className={"form-check-input mt-0 p-3 bg-secondary"}
+            type={"checkbox"}
+          />
+        </InputGroup.Text>
 
-const TodoListItemsObserver = observer(TodoListItems)
+        <FormControl
+          value={todo.title}
+          onChange={(e) => store.onChangeTodoText(e, todo.id)}
+          placeholder={`${todo.id}`}
+          className={"fs-5 bg-dark text-light"}
+        />
+        <InputGroup.Text className="bg-dark">
+          <CloseButton
+            onClick={() => store.removeTodo(todo.id)}
+            className="btn-close-white"
+          />
+        </InputGroup.Text>
+      </InputGroup>
+    ))}
+  </>
+);
 
-function TodoList() {
-  return (
-    <>
-      <Heading>Todo List</Heading>
-      <TodoListItemsObserver />
-    </>
-  );
-}
+const TodoList = observer(TodoListItems);
 
 export default TodoList;

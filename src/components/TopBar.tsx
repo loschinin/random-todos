@@ -1,21 +1,20 @@
 import * as React from "react";
-import {Button, Grid} from "@chakra-ui/react";
-import {ColorModeSwitcher} from "./ColorModeSwitcher";
+import { FC } from "react";
 import store from "../store";
+import { Button } from "react-bootstrap";
 
-/*
-JSON source: https://raw.githubusercontent.com/jherr/todos-four-ways/master/data/todos.json
-*/
+const url = "https://jsonplaceholder.typicode.com/todos";
 
-function TopBar() {
-    const url = "https://raw.githubusercontent.com/jherr/todos-four-ways/master/data/todos.json"
-
+const TopBar: FC = () => {
   return (
-    <Grid pt={2} templateColumns="1fr 1fr" columnGap="3">
-      <ColorModeSwitcher />
-      <Button onClick={() => store.load(url)}>Load</Button>
-    </Grid>
+    <Button
+      variant="outline-secondary"
+      className={"fs-5"}
+      onClick={() => store.load(url)}
+    >
+      Load
+    </Button>
   );
-}
+};
 
 export default TopBar;

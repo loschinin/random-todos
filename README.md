@@ -1,1 +1,1 @@
-Base project for the Todo state manager series
+Try MobX and bootstrap on Todos
